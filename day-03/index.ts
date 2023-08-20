@@ -1,10 +1,10 @@
-import { readFileSync } from 'fs';
+import { getContent } from "../utils";
 
 const test = false;
-const content = readFileSync(`day-03/input-${test ? "test" : "full"}.txt`, { encoding: "utf8" })
+const content = await getContent(test).then(str => str
   .replace("/\r/g", "")
   .trim()
-  .split("\n");
+  .split("\n"));
 
 function firstPart() {
   let sum = 0;

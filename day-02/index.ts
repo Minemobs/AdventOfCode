@@ -1,3 +1,5 @@
+import { getContent } from "../utils";
+
 const choice = {
   rock: ['A', 'X'],
   paper: ['B', 'Y'],
@@ -51,8 +53,7 @@ function rpsVerify(line: string, twoStars : boolean = false) : number {
 
 const test = false;
 
-const file = Bun.file(`day-02/input-${test ? 'test' : 'full'}.txt`);
-const text = await file.text();
+const text = await getContent(test);
 const lines = text.split("\n");
 let score = 0;
 
