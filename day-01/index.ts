@@ -1,4 +1,4 @@
-import { getContent } from "../utils";
+import { getContent, isEmpty } from "../utils";
 
 const test = false;
 const lines = await getContent(test).then(str => str.split("\n"));
@@ -6,7 +6,7 @@ let calories : number[] = []
 let temp : number[] = []
 
 for(const line of lines) {
-    if(line.length !== 0) {
+    if(!isEmpty(line)) {
         temp.push(Number.parseInt(line));
         continue;
     }

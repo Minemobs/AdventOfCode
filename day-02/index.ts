@@ -1,4 +1,4 @@
-import { getContent } from "../utils";
+import { getContent, isEmpty } from "../utils";
 
 const choice = {
   rock: ['A', 'X'],
@@ -59,7 +59,7 @@ let score = 0;
 
 for(let i = 0; i < lines.length; i++) {
   const line = lines[i];
-  if(line === undefined || line.length === 0) continue;
+  if(line === undefined || isEmpty(line)) continue;
   score += rpsVerify(line, true);
 }
   
