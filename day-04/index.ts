@@ -32,10 +32,6 @@ function secondPart() {
             (firstPair[1] - secondPair[0] > 0 && firstPair[1] < secondPair[1]) ||
             (secondPair[0] < firstPair[0] && secondPair[1] > firstPair[0])
         ) sum++;
-        else {
-            
-            console.table([firstPair, secondPair])
-        }
     }
     return sum;
 }
