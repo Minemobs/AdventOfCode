@@ -18,14 +18,13 @@ function firstPart() {
 function secondPart() {
   let sum = 0;
   for(let i = 0; i < content.length; i += 3) {
-    const firstCompartment = content[i]!;
-    const secondCompartment = content[i + 1]!;
-    const thirdCompartment = content[i + 2]!;
-    const char = [...secondCompartment].find(c => firstCompartment.indexOf(c) !== -1 && thirdCompartment.indexOf(c) !== -1);
+    const [firstCompartment, secondCompartment, thirdCompartment] = [content[i]!, content[i + 1]!, content[i + 2]!];
+    const char = [...secondCompartment].find(
+      c => firstCompartment.indexOf(c) !== -1 && thirdCompartment.indexOf(c) !== -1);
     if(char === undefined) throw new Error("Couldn't find repeated letter");
     sum += toPriority(char);
   }
-  console.log(sum);
+  return sum;
 }
 
 function toPriority(char: string) {
@@ -34,4 +33,7 @@ function toPriority(char: string) {
 }
 
 //firstPart();
-secondPart();
+console.time("How long?");
+const sum = secondPart();
+console.timeEnd("How long?");
+console.log(sum);
