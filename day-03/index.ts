@@ -1,10 +1,7 @@
 import { getContent } from "../utils";
 
 const test = false;
-const content = await getContent(test).then(str => str
-  .replace("/\r/g", "")
-  .trim()
-  .split("\n"));
+const content = await getContent(test).then(str => str.split("\n"));
 
 function firstPart() {
   let sum = 0;

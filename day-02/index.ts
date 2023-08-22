@@ -10,14 +10,6 @@ type Choice = typeof choice[keyof typeof choice][number];
 type PlayerChoice = Exclude<Choice, "X" | "Y" | "Z">;
 type EncryptedChoice = Exclude<Choice, "A" | "B" | "C">;
 
-function toChoice(encriptedChoice: EncryptedChoice) : PlayerChoice {
-  switch(encriptedChoice) {
-    case 'X': return 'A';
-    case 'Y': return 'B';
-    case 'Z': return 'C';
-  }
-}
-
 function choiceToPoint(playerChoice: PlayerChoice) {
   if(playerChoice === choice.rock[0]) return 1;
   else if(playerChoice === choice.paper[0]) return 2;
@@ -25,16 +17,11 @@ function choiceToPoint(playerChoice: PlayerChoice) {
 }
 
 function rpsVerifyUsingChoices(playerChoice: PlayerChoice, encriptedChoice: EncryptedChoice) : number {
-  const yourChoice = toChoice(encriptedChoice);
+  const yourChoice = String.fromCharCode(encriptedChoice.charCodeAt(0) - 23) as PlayerChoice
   let points = choiceToPoint(yourChoice);
   //Verfication
   if(playerChoice === yourChoice) return points + 3;
-  const winPairs : Record<PlayerChoice, PlayerChoice> = {
-    'A': 'B',
-    'B': 'C',
-    'C': 'A',
-  } as const;
-  if(winPairs[playerChoice] === yourChoice) return points + 6;
+  if(at(choices.indexOf(playerChoice) + 1) === yourChoice) return points + 6;
   return points;
 }
 
@@ -60,7 +47,7 @@ let score = 0;
 for(let i = 0; i < lines.length; i++) {
   const line = lines[i];
   if(line === undefined || isEmpty(line)) continue;
-  score += rpsVerify(line, true);
+  score += rpsVerify(line, false);
 }
   
 console.log(`Your score is: ${score}`);
