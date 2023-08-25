@@ -17,6 +17,9 @@
     "noUncheckedIndexedAccess": true,
     "types": [
       "bun-types" // add Bun global
-    ]
+    ],
+    "paths": {
+      "custom": ["./custom.d.ts"]
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { getContent, isEmpty } from "../utils";
+import { getContent, isEmpty, firstChar } from "../utils";
 
 const choice = {
   rock: ['A', 'X'],
@@ -17,7 +17,7 @@ function choiceToPoint(playerChoice: PlayerChoice) {
 }
 
 function rpsVerifyUsingChoices(playerChoice: PlayerChoice, encriptedChoice: EncryptedChoice) : number {
-  const yourChoice = String.fromCharCode(encriptedChoice.charCodeAt(0) - 23) as PlayerChoice
+  const yourChoice = String.fromCharCode(firstChar(encriptedChoice) - 23) as PlayerChoice
   let points = choiceToPoint(yourChoice);
   //Verfication
   if(playerChoice === yourChoice) return points + 3;

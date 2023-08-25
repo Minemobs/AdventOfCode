@@ -12,10 +12,6 @@ function firstPart() {
     return sum;
 }
 
-//952 too high
-//6xx too low
-//777 too low
-//It looks bad but Idk how to make it better
 function secondPart() {
     let sum = 0;
     const lines = content.split("\n").map(str => str.split(new RegExp("[,-]")).map(Number));
