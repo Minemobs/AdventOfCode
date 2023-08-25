@@ -1,4 +1,4 @@
-import { getContent } from "../utils";
+import { getContent, reverseString } from "../utils";
 
 const test = false;
 const content = await getContent(test);
@@ -10,15 +10,11 @@ type Instructions = {
 }
 
 function parseInstructions(line: string) : Instructions {
-    const arr : number[] = [];
-    for(const num of line.split(" ")) {
-        if([...num].find(c => c < '0' || c > '9') !== undefined) continue;
-        arr.push(Number(num));
-    }
+    const arr = line.split(" ").filter(l => [...l].find(c => c < '0' || c > '9') === undefined).map(Number) as [number, number, number];
     return {
-        moveAmount: arr[0]!,
-        from: arr[1]!,
-        to: arr[2]!
+        moveAmount: arr[0],
+        from: arr[1] - 1,
+        to: arr[2] - 1
     };
 }
 
@@ -38,22 +34,31 @@ function createStack(input: string[], numberOfColumn: number) : string[][] {
     return array;
 }
 
-function firstPartHandle(lines: string[], instructionLines: string[]) : string {
-    const numberOfColumn = Number(lines.at(-1)!.trim().at(-1)!);
-    const array = createStack(lines.slice(0, lines.length - 1), numberOfColumn);
+function moveStack(array: string[][], instructionLines: string[], reverse = false) {
     for(const instruction of instructionLines.map(parseInstructions)) {
+        const tempArray = [];
         for(let i = 0; i < instruction.moveAmount; i++) {
-            array[instruction.to - 1]!.push(array[instruction.from - 1]!.pop()!);
+            const element = array[instruction.from]!;
+            if(reverse) {
+                tempArray.push(element.pop());
+                continue;
+            }
+            else array[instruction.to]!.push(element.pop()!);
+        }
+        for(const el of tempArray.reverse()) {
+            array[instruction.to]!.push(el!);
         }
     }
-    return array.map(arr => arr.at(-1)).join("");
+    return array;
 }
 
-function firstQuizz() {
-    const [firstPart, secondPart] = content.split("\n\n") as [string, string];
-    const string = firstPartHandle(firstPart.split("\n"), secondPart.split("\n"));
-    console.log(string);
+function quizz(lines: string[], instructionLines: string[], reverse = false) : string {
+    const numberOfColumn = Number(lines.at(-1)!.trim().at(-1)!);
+    const str = moveStack(createStack(lines.slice(0, lines.length - 1), numberOfColumn), instructionLines, reverse)
+        .map(arr => arr.at(-1)).join("");
+    return str;
 }
 
-firstQuizz()
-console.log("Hello World".charCodeAt())
+const [firstPart, secondPart] = content.split("\n\n") as [string, string];
+console.log(quizz(firstPart.split("\n"), secondPart.split("\n")));
+console.log(quizz(firstPart.split("\n"), secondPart.split("\n"), true));
