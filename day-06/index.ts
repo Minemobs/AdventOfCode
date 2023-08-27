@@ -3,8 +3,8 @@ import { getContent } from "../utils";
 const test = false;
 const content = await getContent(test);
 
-function firstPart() {
-    const cursorSize = 4
+function run() {
+    const cursorSize = test ? 4 : 14
     for(let i = 0; i < content.length; i++) {
         const str = content.substring(i, i + cursorSize);
         let foundDup = false;
@@ -22,4 +22,4 @@ function firstPart() {
     }
 }
 
-firstPart();
+run();
