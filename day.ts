@@ -1,30 +1,30 @@
-import { readdir, mkdir, writeFile } from "fs";
+import { readdir, mkdir } from "fs/promises";
+import { awaitWithError } from "./utils";
 
-function getLatestDay(callback: (folderPath: `./day-${number | '0'}${number}`) => void, addOne: boolean = false) {
-    readdir('./', (err, files) => {
-        if(err !== null) throw new Error("An error occured while reading files");
-        const num = files.filter(file => file.startsWith("day-")).map(file => file.split("-")[1]!).map(Number).sort((a, b) => a - b).at(-1)! + (addOne ? 1 : 0);
-        callback(`./day-${num < 10 ? '0' : ''}${num}` as './day-00');
+async function getLatestDay(addOne: boolean = false) {
+    const files = await awaitWithError(readdir('./'));
+    if(files.data === undefined) throw new Error("Couldn't get all files in the directory.");
+    const num = files.data.filter(file => file.startsWith("day-")).map(file => file.split("-")[1]!).map(Number).sort((a, b) => a - b).at(-1)! + (addOne ? 1 : 0);
+    return `day-${num < 10 ? '0' : num}${num}`;
+}
+
+async function addDay() {
+    await getLatestDay().then(async (folderPath) => {
+        await mkdir(folderPath);
+        Bun.write(folderPath + "/index.ts", "import { getContent } from \"../utils\";\n\nconst test = true;\nconst content = await getContent(test);\n\nconsole.log(\"Hi\");");
+        Bun.write(folderPath + "/input-full.txt", "");
+        Bun.write(folderPath + "/input-test.txt", "");
     });
 }
 
-function addDay() {
-    getLatestDay(folderPath => {
-        mkdir(folderPath, () => {});
-        Bun.write(folderPath + "/index.ts", "import { getContent } from \"../utils\";\n\nconst test = true;\nconst content = getContent(test);\n\nconsole.log(\"Hi\");");
-        Bun.write(folderPath + "/input-full.txt", "");
-        Bun.write(folderPath + "/input-test.txt", "");
-    }, true);
-}
-
-function run() {
-    getLatestDay(folderPath => Bun.spawnSync(["bun", "run", folderPath.concat("/index.ts")]));
+async function run() {
+    await getLatestDay().then(folderPath => Bun.spawn(["bun", "run", "index.ts"], { cwd: folderPath, stderr: "inherit", stdout: "inherit"}));
 }
 
 while(true) {
     const str = (prompt("Do you want to create a new day or run the lastest exercice ?\n[N or R]") ?? '').toUpperCase();
     if(str !== 'N' && str !== 'R') continue;
-    if(str === 'N') addDay();
-    else run();
+    if(str === 'N') await addDay();
+    else await run();
     break;
 }

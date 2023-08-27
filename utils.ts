@@ -38,3 +38,17 @@ export function assertArrayEquals<T extends number | string>(x: Array<T>, y: Arr
 export function log(str: string | number | undefined) {
   console.log(`{${str}}`);
 }
+
+export async function awaitWithError<T>(promise: Promise<T>) {
+  try {
+    return {
+      data: await promise,
+      err: undefined
+    } as const;
+  } catch(err: unknown) {
+    return {
+      data: undefined,
+      err
+    } as const;
+  }
+}
