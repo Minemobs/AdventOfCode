@@ -9,7 +9,7 @@ async function getLatestDay(addOne: boolean = false) {
 }
 
 async function addDay() {
-    await getLatestDay().then(async (folderPath) => {
+    await getLatestDay(true).then(async (folderPath) => {
         await mkdir(folderPath);
         Bun.write(folderPath + "/index.ts", "import { getContent } from \"../utils\";\n\nconst test = true;\nconst content = await getContent(test);\n\nconsole.log(\"Hi\");");
         Bun.write(folderPath + "/input-full.txt", "");
