@@ -1,39 +1,24 @@
-import { getContent, isEmpty } from "../utils";
+import { getContent, isDigit, isNotBlank } from "../utils";
 
-const testingMode = false;
-const lines = await getContent(testingMode).then(str => str.split("\n"));
+const test = process.env["TEST"] === undefined ? false : true;
+const content = await getContent(test).then(it => it.split("\n").filter(isNotBlank));
 
-function part2() {
-    let calories : number[] = []
-    let temp : number[] = []
+let sum = 0;
 
-    for(const line of lines) {
-        if(!isEmpty(line)) {
-            temp.push(Number.parseInt(line));
-            continue;
-        }
-        let j = 0;
-        for(let k of temp) j += k;
-        calories.push(j);
-        temp = [];
-    }
-
-    calories = calories.sort((a, b) => a - b)
-    console.log(`First: ${calories[0]}\nLast: ${calories.at(-1)}`);
-    console.log(`Top 3 : ${calories.at(-1)! + calories.at(-2)! + calories.at(-3)!}`);
+for(const line of content) {
+  let num = 0;
+  for(let i = 0; i < line.length; i++) {
+    const char = line.charCodeAt(i);
+    if(!isDigit(char)) continue;
+    num = (char - '0'.charCodeAt()) * 10;
+    break;
+  }
+  for(let i = line.length - 1; i >= 0; i--) {
+    const char = line.charCodeAt(i);
+    if(!isDigit(char)) continue;
+    num += char - '0'.charCodeAt();
+    break;
+  }
+  sum += num;
 }
-
-function part1() {
-    let [sum, prevSum] = [0, 0];
-    for(const line of lines) {
-        if(isEmpty(line)) {
-            if(sum > prevSum) prevSum = sum;
-            sum = 0;
-            continue;
-        }
-        sum += Number.parseInt(line);
-    }
-    return Math.max(prevSum, sum);
-}
-
-console.log(part1())
+console.log("Sum:", sum);

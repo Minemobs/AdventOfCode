@@ -27,6 +27,14 @@ export function reverseString(str: string) {
   return str.split("").reverse().join("");
 }
 
+export function isNotBlank(str: string) {
+  return !isBlank(str);
+}
+
+export function isDigit(char: char) {
+  return char >= '0'.charCodeAt() && char <= '9'.charCodeAt();
+}
+
 export function assertArrayEquals<T extends number | string>(x: Array<T>, y: Array<T>) {
   if(x.length !== y.length) return false;
   for(let i = 0; i < x.length; i++) {

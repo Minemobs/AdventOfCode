@@ -4,7 +4,7 @@ import { awaitWithError } from "./utils";
 async function getLatestDay(addOne: boolean = false) {
     const files = await awaitWithError(readdir('./'));
     if(files.data === undefined) throw new Error("Couldn't get all files in the directory.");
-    const num = files.data.filter(file => file.startsWith("day-")).map(file => file.split("-")[1]!).map(Number).sort((a, b) => a - b).at(-1)! + (addOne ? 1 : 0);
+    const num = files.data.filter(file => file.startsWith("day-")).map(file => file.split("-")[1]!).map(Number).map(n => Number.isNaN(n) ? 1 : n).sort((a, b) => a - b).at(-1)! + (addOne ? 1 : 0);
     return `day-${num < 10 ? '0' : num}${num}`;
 }
 
