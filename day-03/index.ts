@@ -13,14 +13,14 @@ function firstPart() {
     let partNumber = false;
     for(let charIndex = 0; charIndex < chars.length + 1; charIndex++) {
       if(charIndex !== chars.length && isDigit(chars[charIndex]!.charCodeAt(0))) {
-        if(!partNumber && checkArround(lineIndex, charIndex)) partNumber = true;
+        if(!partNumber && firstPartCheckArround(lineIndex, charIndex)) partNumber = true;
         lastNum += chars[charIndex]!;
       } else if(lastNum.length !== 0) {
         if(partNumber) {
           partNumber = false;
           sum += Number(lastNum);
         } else {
-          debug(charIndex, lastNum, lineIndex);
+          //debug(charIndex, lastNum, lineIndex);
         }
         lastNum = "";
       }
@@ -51,7 +51,7 @@ function isSymbol(char: string | undefined) {
   return char !== undefined && char !== '' && !isDigit(char.charCodeAt(0)) && char !== '.';
 }
 
-function checkArround(currentLineIndex: number, currentCharIndex: number) {
+function firstPartCheckArround(currentLineIndex: number, currentCharIndex: number) {
   if(isSymbol(content[currentLineIndex]?.charAt(currentCharIndex + 1)) || isSymbol(content[currentLineIndex]?.charAt(currentCharIndex - 1))) return true; // left and right
   if(isSymbol(content[currentLineIndex - 1]?.charAt(currentCharIndex)) || isSymbol(content[currentLineIndex + 1]?.charAt(currentCharIndex))) return true; // Up and Down
   if(isSymbol(content[currentLineIndex - 1]?.charAt(currentCharIndex + 1)) || isSymbol(content[currentLineIndex + 1]?.charAt(currentCharIndex + 1))) return true; // Up Left and Up Right
@@ -60,3 +60,12 @@ function checkArround(currentLineIndex: number, currentCharIndex: number) {
 }
 
 firstPart();
+
+function secondPart() {
+  // Check each lines for '*'.
+  // Check its surrounding lines
+  // Check if there's only 2 surrounding digits (don't need to read the entire number)
+  // If there's only 2, read the 2 numbers and multiply them
+  // Then add the result to the sum
+  // TODO: Tomorrow
+}
