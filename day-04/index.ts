@@ -21,14 +21,18 @@ function firstPart() {
 }
 firstPart();
 
+const cash: number[] = [];
+
 function getAmountOfCardDuped(index: number) {
   let amount = 0;
   const [ winningNumbers, numbers ] = parse(content[index]!);
   const length = winningNumbers.filter(n => numbers.indexOf(n) !== -1).length;
   const lastDupedCard = index + length;
+  if(cash[index] !== undefined) return cash[index]!;
   for(let i = index + 1; i < lastDupedCard + 1; i++) {
     amount += getAmountOfCardDuped(i);
   }
+  cash[index] = amount + 1;
   return amount + 1;
 }
 
